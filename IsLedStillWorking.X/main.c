@@ -61,7 +61,8 @@ void Led_Callback()
     LED_ref_Toggle();
     ADCC_DefineSetPoint(LED_ref_LAT?4095:0);
     ADCC_DischargeSampleCapacitor();
-    ADCC_GetSingleConversion(LED_ref);
+    if(positive_logic == LED_ref_LAT)
+        ADCC_GetSingleConversion(LED_ref);
     if(debug == true)
     {
         printf("LED Lat %d\n", LED_ref_LAT);
@@ -90,7 +91,7 @@ void setThresholds()
     else
     {
         ADCC_SetUpperThreshold(20);
-        ADCC_SetLowerThreshold(1);
+        ADCC_SetLowerThreshold(-1);
     }
 }
 
