@@ -79,16 +79,16 @@ void ADCC_Initialize(void)
     ADCON1 = 0x0;
     //ADCRS 1; ADMD Basic_mode; ADACLR disabled; ADPSIS RES; 
     ADCON2 = 0x10;
-    //ADCALC Actual result vs setpoint; ADTMD ADERR > ADLTH and ADERR < ADUTH; ADSOI ADGO not cleared; 
-    ADCON3 = 0x13;
+    //ADCALC Actual result vs setpoint; ADTMD disabled; ADSOI ADGO not cleared; 
+    ADCON3 = 0x10;
     //ADMATH registers not updated; 
     ADSTAT = 0x0;
     //ADNREF VSS; ADPREF VDD; 
     ADREF = 0x0;
     //ADACT disabled; 
     ADACT = 0x0;
-    //ADCCS FOSC/4; 
-    ADCLK = 0x1;
+    //ADCCS FOSC/8; 
+    ADCLK = 0x3;
     //GO_nDONE undefined; ADFM right; ADON enabled; ADCS FOSC; ADCONT disabled; 
     ADCON0 = 0x84;
     

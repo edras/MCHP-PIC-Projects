@@ -1,13 +1,13 @@
 /**
- * System Driver Header File
- * 
- * @file system.h
- * 
- * @defgroup systemdriver System Driver
- * 
- * @brief This is the generated header file for the System Driver.
+ * FVR Generated Driver File
  *
- * @version Driver Version 2.0.1
+ * @file fvr.c
+ * 
+ * @ingroup fvr 
+ * 
+ * @brief This file contains the driver code for FVR module.
+ * 
+ * @version FVR Driver Version 2.0.1
 */
 
 /*
@@ -31,36 +31,29 @@
     THIS SOFTWARE.
 */
 
-#ifndef SYSTEM_H
-#define	SYSTEM_H
-
 /**
   Section: Included Files
 */
+
 #include <xc.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <conio.h>
-#include "../system/config_bits.h"
-#include "../system/clock.h"
-#include "../system/pins.h"
-#include "../adc/adcc.h"
-#include "../fvr/fvr.h"
-#include "../nvm/nvm.h"
-#include "../timer/tmr0.h"
-#include "../uart/uart1.h"
-#include "../system/interrupt.h"
+#include "../fvr.h"
+
+
 
 /**
- * @ingroup systemdriver
- * @brief This initializes the system module and must be called before any other API is called.
- * This routine should only be called once during system initialization.
- * @param None
- * @return None
+  Section: FVR APIs
 */
-void SYSTEM_Initialize(void);
 
-#endif	/* SYSTEM_H */
+void FVR_Initialize(void)
+{
+    // ADFVR 2x; CDAFVR off; TSRNG Hi_range; TSEN enabled; FVREN enabled; 
+    FVRCON = 0xF2;
+}
+
+bool FVR_IsOutputReady(void)
+{
+	return (FVRCONbits.FVRRDY);
+}
 /**
  End of File
 */

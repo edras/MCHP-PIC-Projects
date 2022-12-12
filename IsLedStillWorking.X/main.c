@@ -38,61 +38,149 @@
 
 bool positive_logic = true;
 bool debug = false;
+bool printInfo = false;
 
-void printHeader()
+int16_t offset = 0;
+int16_t gain = 0;
+int8_t temperature = 20;
+char ledError = 0;
+float rdsOn = 40;
+
+#define P_Current_num (3.3/4095)
+#define P_Current_den 0.00498
+#define N_Current (3.3/4095)/0.00548
+
+typedef struct{
+    uint8_t  latState   :1;
+    uint8_t  upperCross :1;
+    uint8_t  lowerCross :1;
+    uint16_t adcResult;
+    int16_t  error;
+    int16_t  setPoint;
+    int16_t  upperThreshold;
+    int16_t  lowerThreshold;
+} ADC_DATA;
+
+ADC_DATA adcData;
+
+void printHeader(void)
 {
     printf("\033[2J");      //Clear screen
     printf("\033[0;0f");    //return cursor to 0,0
     printf("\033[?25l");    //disable cursor
-    printf("Press T to switch LED Logic, D to switch debug\n");
-    printf("Positive logic: %d\n", positive_logic);
-    printf("Debug: %d\n", debug);    
+    
+    printf("------------------------------------------------------------------\r\n");
+    printf("PIC18F57Q43 Curiosity Development Board Demo                      \r\n");
+    printf("SingleWire LED verification                                       \r\n");
+    printf("------------------------------------------------------------------\r\n");
+    printf("C - Clear screen \r\n");
+    printf("D - Toggle Debug mode \r\n");
+    printf("L - Toggle LED Logic \r\n");
+    printf("\r\n");
 }
 
-void clearline()
+static void printData(void)
 {
-    printf("\033[0;1f");    //return cursor to 0,0
+    if(printInfo == false) return;
+    printInfo = false;
+    
+    printf("\033[8;0f\n");    //move cursor to row 8, column 0 (after header)
+
+    if(ledError > 0)
+        printf("LED state: defect    \r\n");
+    else
+        printf("LED state: working   \r\n");
+    printf("Positive logic: %d\r\n", positive_logic);
+    printf("Temperature: %d   \r\n", temperature);    
+    if(positive_logic)
+        printf("P-MOS Rds_on: %.2f\r\n", rdsOn);
+    else
+        printf("N-MOS Rds_on: %.2f\r\n", rdsOn);
+    
+    if(debug)
+    {
+        printf("\n**********\n");
+        printf("LED Lat %d\n", adcData.latState);
+        printf("SetPoint %d      \n", adcData.setPoint);
+        printf("ADC Result %d    \n", adcData.adcResult);
+        printf("Error %d         \n\n", adcData.error);
+        printf("Lower Threshold: %d      \n", adcData.lowerThreshold);
+        printf("Crossed Lower Threshold: %d    \n", adcData.lowerCross);
+        printf("**********\n");        
+    }
 }
 
+void readDIAValues(void)
+{
+    gain = DeviceID_Read(DIA_TSHR1);
+    offset = DeviceID_Read(DIA_TSHR3);
+}
+
+void calcTemperature(void)
+{
+    ADTIE = 0;
+    ADREF |= 3;
+    ADCON3bits_t tmpADCON = ADCON3bits;
+    ADCON3bits.TMD = 0; // no threshold interrupt
+    
+    ADCC_GetSingleConversion(channel_Temp);
+    int24_t temp = (int24_t)ADCC_GetConversionResult() * gain;
+    temp /= 256;
+    temp += offset;
+    temperature = (int16_t)(temp / 10);
+    
+    ADCON3bits = tmpADCON;
+    ADREF &= 0xFC;
+    ADTIE = 1;
+}
 
 void Led_Callback()
 {
     BuiltIn_LED_Toggle();
     LED_ref_Toggle();
+    calcTemperature();
+    if(ledError > 0) ledError--;
+    printInfo = true;
+    
     ADCC_DefineSetPoint(LED_ref_LAT?4095:0);
     ADCC_DischargeSampleCapacitor();
     if(positive_logic == LED_ref_LAT)
-        ADCC_GetSingleConversion(LED_ref);
-    if(debug == true)
     {
-        printf("LED Lat %d\n", LED_ref_LAT);
-        printf("ADC Result %d\n", ADCC_GetConversionResult());
-        printf("SetPoint %d\n", LED_ref_LAT?4095:0);
-        printf("Error %d\n", ADCC_GetErrorCalculation());
-        printf("Upper %d\n", ADCC_HasErrorCrossedUpperThreshold());
-        printf("Lower %d\n", ADCC_HasErrorCrossedLowerThreshold());
-        printf("**********\n");
+        ADCC_GetSingleConversion(LED_ref);
+        adcData.latState = LED_ref_LAT;
+        adcData.setPoint = LED_ref_LAT?4095:0;
+        adcData.adcResult = ADCC_GetConversionResult();
+        adcData.error = (int16_t)ADCC_GetErrorCalculation();
+        adcData.upperCross = ADCC_HasErrorCrossedUpperThreshold();
+        adcData.lowerCross = ADCC_HasErrorCrossedLowerThreshold();
+        if(positive_logic)
+        {
+            rdsOn = 3.3 - ((float)adcData.adcResult * P_Current_num);
+            rdsOn /= P_Current_den; 
+        }
+        else 
+            rdsOn = (float)adcData.adcResult * N_Current;
     }
 }
 
 void Led_ThresholdISR()
 {
-    printf("LED always off!\n");    
+    ledError = 5;
 }
 
 void setThresholds()
 {
-    // Normal Operation if Error > Upper or Error < Lower
     if(positive_logic)
     {
-        ADCC_SetUpperThreshold((uint16_t)-1);
-        ADCC_SetLowerThreshold((uint16_t)-100);
+        adcData.lowerThreshold = -100;
+        ADCON3bits.TMD = 2; // ADERR > ADLTH
     }
     else
     {
-        ADCC_SetUpperThreshold(20);
-        ADCC_SetLowerThreshold(-1);
+        adcData.lowerThreshold = 20;
+        ADCON3bits.TMD = 1; // ADERR < ADLTH
     }
+    ADCC_SetLowerThreshold((uint16_t)adcData.lowerThreshold);
 }
 
 int main(void)
@@ -105,6 +193,7 @@ int main(void)
     LED_ref_SetDigitalOutput();         
     setThresholds();
     
+    readDIAValues();
     Timer0_OverflowCallbackRegister(Led_Callback);
     ADCC_SetADTIInterruptHandler(Led_ThresholdISR);
 
@@ -120,17 +209,19 @@ int main(void)
             uint8_t command = UART1_Read();
             switch(command)
             {
-                case 'T': 
-                    positive_logic ^= 1;
-                    printf("Switch Logic - Positive:%d\n", positive_logic);
-                    setThresholds();
-                    break;
                 case 'D':
                     debug ^= 1;
-                    printf("Debug: %d\n", debug);
+                case 'C':
+                    printHeader();
+                    printInfo = true;
+                    break;
+                case 'L': 
+                    positive_logic ^= 1;
+                    setThresholds();
                     break;
                 default: break;
             }
         }
+        printData();
     }    
 }

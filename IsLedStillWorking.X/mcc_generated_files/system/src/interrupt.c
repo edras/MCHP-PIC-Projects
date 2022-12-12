@@ -85,13 +85,13 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         PIN_MANAGER_IOC();
     }
     // interrupt handler
-    if(PIE3bits.TMR0IE == 1 && PIR3bits.TMR0IF == 1)
-    {
-        Timer0_OverflowISR();
-    }
-    else if(PIE2bits.ADTIE == 1 && PIR2bits.ADTIF == 1)
+    if(PIE2bits.ADTIE == 1 && PIR2bits.ADTIF == 1)
     {
         ADCC_ThresholdISR();
+    }
+    else if(PIE3bits.TMR0IE == 1 && PIR3bits.TMR0IF == 1)
+    {
+        Timer0_OverflowISR();
     }
     else
     {

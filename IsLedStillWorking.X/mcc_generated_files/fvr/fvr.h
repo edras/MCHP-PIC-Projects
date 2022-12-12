@@ -1,13 +1,13 @@
 /**
- * System Driver Header File
+ * FVR Generated Driver API Header File
  * 
- * @file system.h
+ * @file fvr.h
  * 
- * @defgroup systemdriver System Driver
+ * @defgroup fvr FVR
  * 
- * @brief This is the generated header file for the System Driver.
+ * @brief This file contains API prototypes and other datatypes for FVR module.
  *
- * @version Driver Version 2.0.1
+ * @version FVR Driver Version 2.0.1
 */
 
 /*
@@ -31,36 +31,52 @@
     THIS SOFTWARE.
 */
 
-#ifndef SYSTEM_H
-#define	SYSTEM_H
+#ifndef FVR_H
+#define FVR_H
 
 /**
   Section: Included Files
 */
-#include <xc.h>
-#include <stdint.h>
+
 #include <stdbool.h>
-#include <conio.h>
-#include "../system/config_bits.h"
-#include "../system/clock.h"
-#include "../system/pins.h"
-#include "../adc/adcc.h"
-#include "../fvr/fvr.h"
-#include "../nvm/nvm.h"
-#include "../timer/tmr0.h"
-#include "../uart/uart1.h"
-#include "../system/interrupt.h"
+#include <stdint.h>
+
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    extern "C" {
+
+#endif
 
 /**
- * @ingroup systemdriver
- * @brief This initializes the system module and must be called before any other API is called.
- * This routine should only be called once during system initialization.
- * @param None
- * @return None
+  Section: FVR APIs
 */
-void SYSTEM_Initialize(void);
 
-#endif	/* SYSTEM_H */
+
+/**
+ * @ingroup fvr
+ * @brief This API initializes the FVR module and be called before any other FVR routines.
+ * @param void
+ * @return void
+ */
+ void FVR_Initialize(void);
+
+/**
+ * @ingroup fvr
+ * @brief This routine gets the FVR output ready status.
+ * @pre The FVR should have been initialized before calling this function.
+ * @param void
+ * @retval true if FVR module is ready for use.
+ * @retval false if FVR module is not ready for use.
+ */
+bool FVR_IsOutputReady(void);
+
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+
+#endif // FVR_H
 /**
  End of File
 */

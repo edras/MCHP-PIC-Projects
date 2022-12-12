@@ -10,6 +10,12 @@
         <logicalFolder name="adc" displayName="adc" projectFiles="true">
           <itemPath>mcc_generated_files/adc/adcc.h</itemPath>
         </logicalFolder>
+        <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
+          <itemPath>mcc_generated_files/fvr/fvr.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
+          <itemPath>mcc_generated_files/nvm/nvm.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="system" displayName="system" projectFiles="true">
           <itemPath>mcc_generated_files/system/interrupt.h</itemPath>
           <itemPath>mcc_generated_files/system/system.h</itemPath>
@@ -41,6 +47,16 @@
         <logicalFolder name="adc" displayName="adc" projectFiles="true">
           <logicalFolder name="src" displayName="src" projectFiles="true">
             <itemPath>mcc_generated_files/adc/src/adcc.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="fvr" displayName="fvr" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/fvr/src/fvr.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
+          <logicalFolder name="src" displayName="src" projectFiles="true">
+            <itemPath>mcc_generated_files/nvm/src/nvm.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="system" displayName="system" projectFiles="true">
@@ -117,6 +133,7 @@
       </makeCustomizationType>
       <HI-TECH-COMP>
         <property key="additional-warnings" value="true"/>
+        <property key="appendMe" value=""/>
         <property key="asmlist" value="true"/>
         <property key="call-prologues" value="false"/>
         <property key="default-bitfield-type" value="true"/>
@@ -147,7 +164,7 @@
         <property key="use-iar" value="false"/>
         <property key="verbose" value="false"/>
         <property key="warning-level" value="-3"/>
-        <property key="what-to-do" value="ignore"/>
+        <property key="what-to-do" value="require"/>
       </HI-TECH-COMP>
       <HI-TECH-LINK>
         <property key="additional-options-checksum" value=""/>
