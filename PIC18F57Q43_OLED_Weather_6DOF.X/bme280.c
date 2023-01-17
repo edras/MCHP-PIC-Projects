@@ -192,13 +192,13 @@ void BME280_readMeasurements(void) {
 
     adc_H = (sensorData[BME280_HUM_MSB] << 8) | sensorData[BME280_HUM_LSB];
 
-    adc_T = ((uint32_t) sensorData[BME280_TEMP_MSB] << 12) |
-            (((uint32_t) sensorData[BME280_TEMP_LSB] << 4) |
-            ((uint32_t) sensorData[BME280_TEMP_XLSB] >> 4));
+    adc_T = (sensorData[BME280_TEMP_MSB]  << 12) |
+            (sensorData[BME280_TEMP_LSB]  << 4)  |
+            (sensorData[BME280_TEMP_XLSB] >> 4);
 
-    adc_P = ((uint32_t) sensorData[BME280_PRESS_MSB] << 12) |
-            (((uint32_t) sensorData[BME280_PRESS_LSB] << 4) |
-            ((uint32_t) sensorData[BME280_PRESS_XLSB] >> 4));
+    adc_P = (sensorData[BME280_PRESS_MSB]  << 12) |
+            (sensorData[BME280_PRESS_LSB]  << 4)  |
+            (sensorData[BME280_PRESS_XLSB] >> 4);
 }
 
 float BME280_getTemperature(void) {
@@ -223,12 +223,12 @@ float BME280_getHumidity(void) {
  */
 static long BME280_compensateTemperature(void) {
     long tempV1, tempV2, t;
-
+    
     tempV1 = ((((adc_T >> 3) - ((long) calibParam.dig_T1 << 1))) * ((long) calibParam.dig_T2)) >> 11;
     tempV2 = (((((adc_T >> 4) - ((long) calibParam.dig_T1)) * ((adc_T >> 4) - ((long) calibParam.dig_T1))) >> 12)*((long) calibParam.dig_T3)) >> 14;
     t_fine = tempV1 + tempV2;
     t = (t_fine * 5 + 128) >> 8;
-
+    
     return t;
 }
 

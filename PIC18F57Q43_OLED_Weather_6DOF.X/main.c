@@ -32,6 +32,7 @@
 */
 #include "mcc_generated_files/system/system.h"
 #include "bme280.h"
+#include "oled.h"
 
 /*
     Main application
@@ -44,12 +45,12 @@ int main(void)
     INTERRUPT_GlobalInterruptEnable(); 
 
     BME280_init();
-    BME280_startForcedSensing();
 
     while(1)
     {
         __delay_ms(1000);
         LED_Toggle();
+        
         BME280_readMeasurements();
         float moisture = BME280_getHumidity();
         float temperature = BME280_getTemperature();
