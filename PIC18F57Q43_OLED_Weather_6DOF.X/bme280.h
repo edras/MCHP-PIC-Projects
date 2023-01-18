@@ -33,39 +33,36 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
-#include "constants.h"
 
-/**
-  Section: BME280 Sensor Driver APIs
- */
+typedef enum {
+    PA = 0,
+    KPA,
+    INHG,
+    PSI,
+} BME280_P_UNIT;
 
-char str_temp[30];
-char str_press[30];
-char str_hum[30];
-char str_light[30];
+typedef enum {
+    C = 0,
+    F,
+    K,
+} BME280_T_UNIT;
 
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */
+    
 
 uint8_t BME280_getID(void);
 void BME280_reset(void);
 void BME280_sleep(void);
-void BME280_readFactoryCalibrationParams(void);
-void BME280_config(uint8_t sbtime, uint8_t coeff);
-void BME280_ctrl_meas(uint8_t osrs_T, uint8_t osrs_P, uint8_t mode);
-void BME280_ctrl_hum(uint8_t osrs_H);
 void BME280_init(void);
-void BME280_initializeSensor(void);
-void BME280_startForcedSensing(void);
-void BME280_readMeasurements(void);
+void BME280_startMeasurements(void);
 void BME280_readMeasurements(void);
 float BME280_getTemperature(void);
 float BME280_getHumidity(void);
 float BME280_getPressure(void);
-static long BME280_compensateTemperature(void);
-uint32_t BME280_compensatePressure(void);
-uint32_t BME280_compensateHumidity(void);
+void BME280_setPressureUnity(BME280_P_UNIT);
+void BME280_setTempUnity(BME280_T_UNIT);
 
 #ifdef	__cplusplus
 }

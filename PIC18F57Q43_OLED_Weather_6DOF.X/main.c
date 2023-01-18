@@ -45,17 +45,20 @@ int main(void)
     INTERRUPT_GlobalInterruptEnable(); 
 
     BME280_init();
+    BME280_setPressureUnity(KPA);
+    BME280_setTempUnity(C);
 
     while(1)
     {
+        BME280_startMeasurements();
         __delay_ms(1000);
         LED_Toggle();
-        
         BME280_readMeasurements();
+        
         float moisture = BME280_getHumidity();
         float temperature = BME280_getTemperature();
         float pressure = BME280_getPressure();
-        printf("Moisture: %.2f, Pressure: %.2f, Temp: %.2f\r\n", 
+        printf("Moisture: %.2f%%, Pressure: %.2f KPa, Temp: %.2f C\r\n", 
                 moisture, pressure, temperature);
     }    
 }

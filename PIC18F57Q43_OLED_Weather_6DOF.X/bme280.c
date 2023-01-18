@@ -13,6 +13,117 @@
 
 #include <stdio.h>
 
+    /**
+      Section: BME280 Macro Declarations
+     */
+
+    
+    // Device Information
+#define BME280_ADDR     			0x76
+#define BME280_CHIP_ID  			0x60
+
+    // Sensor Modes
+#define BME280_SLEEP_MODE           0x00
+#define BME280_FORCED_MODE          0x01
+#define BME280_NORMAL_MODE          0x03
+#define BME280_SOFT_RESET           0xB6
+
+    // Oversampling Options
+#define BME280_OVERSAMP_SKIPPED     0x00
+#define BME280_OVERSAMP_X1          0x01
+#define BME280_OVERSAMP_X2          0x02
+#define BME280_OVERSAMP_X4          0x03
+#define BME280_OVERSAMP_X8          0x04
+#define BME280_OVERSAMP_X16         0x05
+
+    // Standby Time
+#define BME280_STANDBY_HALFMS   	0x00
+#define BME280_STANDBY_63MS     	0x01
+#define BME280_STANDBY_125MS    	0x02
+#define BME280_STANDBY_250MS    	0x03
+#define BME280_STANDBY_500MS    	0x04
+#define BME280_STANDBY_1000MS   	0x05
+#define BME280_STANDBY_10MS     	0x06
+#define BME280_STANDBY_20MS     	0x07
+
+    // Filter Coefficients
+#define BME280_FILTER_COEFF_OFF     0x00
+#define BME280_FILTER_COEFF_2       0x01
+#define BME280_FILTER_COEFF_4       0x02
+#define BME280_FILTER_COEFF_8       0x03
+#define BME280_FILTER_COEFF_16      0x04
+
+    // Register Addresses
+#define BME280_ID_REG           0xD0 
+#define BME280_RESET_REG        0xE0
+#define BME280_CTRL_HUM_REG     0xF2
+#define BME280_STATUS_REG       0xF3 
+#define BME280_CTRL_MEAS_REG    0xF4   
+#define BME280_CONFIG_REG       0xF5 
+#define BME280_PRESS_MSB_REG    0xF7
+#define BME280_PRESS_LSB_REG    0xF8
+#define BME280_PRESS_XLSB_REG   0xF9 
+#define BME280_TEMP_MSB_REG     0xFA
+#define BME280_TEMP_LSB_REG     0xFB 
+#define BME280_TEMP_XLSB_REG    0xFC 
+#define BME280_HUM_MSB_REG      0xFD  
+#define BME280_HUM_LSB_REG      0xFE
+
+    // Sensor Data Read Bytes
+#define BME280_PRESS_MSB        0
+#define BME280_PRESS_LSB        1
+#define BME280_PRESS_XLSB       2
+#define BME280_TEMP_MSB         3
+#define BME280_TEMP_LSB         4
+#define BME280_TEMP_XLSB        5
+#define BME280_HUM_MSB          6
+#define BME280_HUM_LSB          7
+#define BME280_DATA_FRAME_SIZE  8
+
+    // Factory Calibration Parameters
+#define BME280_CALIB_DT1_LSB_REG    0x88
+#define BME280_CALIB_DT1_MSB_REG    0x89
+#define BME280_CALIB_DT2_LSB_REG    0x8A
+#define BME280_CALIB_DT2_MSB_REG    0x8B
+#define BME280_CALIB_DT3_LSB_REG    0x8C
+#define BME280_CALIB_DT3_MSB_REG    0x8D
+#define BME280_CALIB_DP1_LSB_REG    0x8E
+#define BME280_CALIB_DP1_MSB_REG    0x8F
+#define BME280_CALIB_DP2_LSB_REG    0x90
+#define BME280_CALIB_DP2_MSB_REG    0x91
+#define BME280_CALIB_DP3_LSB_REG    0x92
+#define BME280_CALIB_DP3_MSB_REG    0x93
+#define BME280_CALIB_DP4_LSB_REG    0x94
+#define BME280_CALIB_DP4_MSB_REG    0x95
+#define BME280_CALIB_DP5_LSB_REG    0x96
+#define BME280_CALIB_DP5_MSB_REG    0x97
+#define BME280_CALIB_DP6_LSB_REG    0x98
+#define BME280_CALIB_DP6_MSB_REG    0x99
+#define BME280_CALIB_DP7_LSB_REG    0x9A
+#define BME280_CALIB_DP7_MSB_REG    0x9B
+#define BME280_CALIB_DP8_LSB_REG    0x9C
+#define BME280_CALIB_DP8_MSB_REG    0x9D
+#define BME280_CALIB_DP9_LSB_REG    0x9E
+#define BME280_CALIB_DP9_MSB_REG    0x9F
+#define BME280_CALIB_DH1_REG        0xA1
+#define BME280_CALIB_DH2_LSB_REG    0xE1
+#define BME280_CALIB_DH2_MSB_REG    0xE2
+#define BME280_CALIB_DH3_REG        0xE3
+#define BME280_CALIB_DH4_MSB_REG    0xE4
+#define BME280_CALIB_DH4_LSB_REG    0xE5
+#define BME280_CALIB_DH5_MSB_REG    0xE6
+#define BME280_CALIB_DH6_REG        0xE7
+
+    /**
+     Section: Macro Declarations for reuse
+     */
+#define DEFAULT_STANDBY_TIME    BME280_STANDBY_HALFMS
+#define DEFAULT_FILTER_COEFF    BME280_FILTER_COEFF_OFF
+#define DEFAULT_TEMP_OSRS       BME280_OVERSAMP_X1
+#define DEFAULT_PRESS_OSRS      BME280_OVERSAMP_X1
+#define DEFAULT_HUM_OSRS        BME280_OVERSAMP_X1
+#define DEFAULT_SENSOR_MODE     BME280_FORCED_MODE
+
 /**
   Section: Variable Definitions
  */
@@ -64,7 +175,21 @@ bme280_config_t bme280_config;
 uint8_t bme280_ctrl_hum;
 bme280_ctrl_meas_t bme280_ctrl_meas;
 bme280_calibration_param_t calibParam;
-long adc_T, adc_H, adc_P, t_fine;
+long sensor_T, sensor_H, sensor_P, t_fine;
+BME280_P_UNIT press_unit = KPA;
+BME280_T_UNIT temp_unit = C;
+
+/*
+ * Function prototypes
+ */
+
+void BME280_readFactoryCalibrationParams(void);
+void BME280_config(uint8_t sbtime, uint8_t coeff);
+void BME280_ctrl_meas(uint8_t osrs_T, uint8_t osrs_P, uint8_t mode);
+void BME280_ctrl_hum(uint8_t osrs_H);
+long BME280_compensateTemperature(void);
+uint32_t BME280_compensatePressure(void);
+uint32_t BME280_compensateHumidity(void);
 
 uint8_t I2C_ReadRegister(uint8_t register_add)
 {
@@ -170,16 +295,13 @@ void BME280_init(void)
     BME280_config(BME280_STANDBY_HALFMS, BME280_FILTER_COEFF_OFF);
     BME280_ctrl_meas(BME280_OVERSAMP_X1, BME280_OVERSAMP_X1, BME280_FORCED_MODE);
     BME280_ctrl_hum(BME280_OVERSAMP_X1);
-    BME280_initializeSensor();    
-}
-
-void BME280_initializeSensor(void) {
+    
     I2C_WriteRegister(BME280_CONFIG_REG, bme280_config.configReg);
     I2C_WriteRegister(BME280_CTRL_HUM_REG, bme280_ctrl_hum);
-    I2C_WriteRegister(BME280_CTRL_MEAS_REG, bme280_ctrl_meas.ctrlMeasReg);
+    I2C_WriteRegister(BME280_CTRL_MEAS_REG, bme280_ctrl_meas.ctrlMeasReg);   
 }
 
-void BME280_startForcedSensing(void) {
+void BME280_startMeasurements(void) {
     bme280_ctrl_meas.mode = BME280_FORCED_MODE;
     I2C_WriteRegister(BME280_CTRL_MEAS_REG, bme280_ctrl_meas.ctrlMeasReg);
 }
@@ -189,26 +311,56 @@ void BME280_readMeasurements(void) {
     uint8_t sensorData[BME280_DATA_FRAME_SIZE];
 
     I2C_ReadDataBlock(BME280_PRESS_MSB_REG, sensorData, BME280_DATA_FRAME_SIZE);
+    
+    sensor_H = ((uint32_t) sensorData[BME280_HUM_MSB] << 8) |
+            sensorData[BME280_HUM_LSB];
 
-    adc_H = (sensorData[BME280_HUM_MSB] << 8) | sensorData[BME280_HUM_LSB];
+    sensor_T = ((uint32_t) sensorData[BME280_TEMP_MSB] << 12) |
+            (((uint32_t) sensorData[BME280_TEMP_LSB] << 4) |
+            ((uint32_t) sensorData[BME280_TEMP_XLSB] >> 4));
 
-    adc_T = (sensorData[BME280_TEMP_MSB]  << 12) |
-            (sensorData[BME280_TEMP_LSB]  << 4)  |
-            (sensorData[BME280_TEMP_XLSB] >> 4);
+    sensor_P = ((uint32_t) sensorData[BME280_PRESS_MSB] << 12) |
+            (((uint32_t) sensorData[BME280_PRESS_LSB] << 4) |
+            ((uint32_t) sensorData[BME280_PRESS_XLSB] >> 4));
+}
 
-    adc_P = (sensorData[BME280_PRESS_MSB]  << 12) |
-            (sensorData[BME280_PRESS_LSB]  << 4)  |
-            (sensorData[BME280_PRESS_XLSB] >> 4);
+void BME280_setPressureUnity(BME280_P_UNIT unity)
+{
+    press_unit = unity;
+}
+
+void BME280_setTempUnity(BME280_T_UNIT unity)
+{
+    temp_unit = unity;
 }
 
 float BME280_getTemperature(void) {
     float temperature = (float) BME280_compensateTemperature() / 100;
+    if(temp_unit == K)
+    {
+        return temperature + 273.15F;
+    }
+    else if(temp_unit == F)
+    {
+        return (temperature * 9/5) + 32;
+    }
     return temperature;
 }
 
 float BME280_getPressure(void) {
     float pressure = (float) BME280_compensatePressure() / 1000;
-    pressure = pressure * 0.295301F;
+    if(press_unit == PA)
+    {
+        return pressure * 1000;
+    }
+    else if(press_unit == INHG)
+    {
+        return pressure * 0.295301F;        
+    }
+    else if(press_unit == PSI)
+    {
+        return pressure * 0.145038F;
+    }
     return pressure;
 }
 
@@ -221,11 +373,16 @@ float BME280_getHumidity(void) {
  * Returns temperature in DegC, resolution is 0.01 DegC. 
  * Output value of "5123" equals 51.23 DegC.  
  */
-static long BME280_compensateTemperature(void) {
+long BME280_compensateTemperature(void) {
     long tempV1, tempV2, t;
     
-    tempV1 = ((((adc_T >> 3) - ((long) calibParam.dig_T1 << 1))) * ((long) calibParam.dig_T2)) >> 11;
-    tempV2 = (((((adc_T >> 4) - ((long) calibParam.dig_T1)) * ((adc_T >> 4) - ((long) calibParam.dig_T1))) >> 12)*((long) calibParam.dig_T3)) >> 14;
+    tempV1 = ((((sensor_T >> 3) - ((long) calibParam.dig_T1 << 1))) * 
+            ((long) calibParam.dig_T2)) >> 11;
+    
+    tempV2 = (((((sensor_T >> 4) - ((long) calibParam.dig_T1)) * 
+            ((sensor_T >> 4) - ((long) calibParam.dig_T1))) >> 12) *
+            ((long) calibParam.dig_T3)) >> 14;
+    
     t_fine = tempV1 + tempV2;
     t = (t_fine * 5 + 128) >> 8;
     
@@ -252,10 +409,13 @@ uint32_t BME280_compensatePressure(void) {
         return 0;
     }
 
-    p = (((uint32_t) (((long) 1048576) - adc_P)-(pressV2 >> 12)))*3125;
-    if (p < 0x80000000) {
+    p = (((uint32_t) (((long) 1048576) - sensor_P)-(pressV2 >> 12))) * 3125;
+    if (p < 0x80000000) 
+    {
         p = (p << 1) / ((uint32_t) pressV1);
-    } else {
+    } 
+    else 
+    {
         p = (p / (uint32_t) pressV1) * 2;
     }
 
@@ -271,7 +431,7 @@ uint32_t BME280_compensateHumidity(void) {
     uint32_t h;
 
     humV = (t_fine - ((long) 76800));
-    humV = (((((adc_H << 14) - (((long) calibParam.dig_H4) << 20) - (((long) calibParam.dig_H5) * humV)) +
+    humV = (((((sensor_H << 14) - (((long) calibParam.dig_H4) << 20) - (((long) calibParam.dig_H5) * humV)) +
             ((long) 16384)) >> 15) * (((((((humV * ((long) calibParam.dig_H6)) >> 10) *
             (((humV * ((long) calibParam.dig_H3)) >> 11) + ((long) 32768))) >> 10) +
             ((long) 2097152)) * ((long) calibParam.dig_H2) + 8192) >> 14));

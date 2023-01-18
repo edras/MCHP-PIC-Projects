@@ -35,4 +35,4 @@ MP_AS_DIR="C:\Program Files\Microchip\xc8\v2.40\bin"
 MP_LD_DIR="C:\Program Files\Microchip\xc8\v2.40\bin"
 MP_AR_DIR="C:\Program Files\Microchip\xc8\v2.40\bin"
 # MP_BC_DIR is not defined
-DFP_DIR=C:/Users/M71906/.mchp_packs/Microchip/PIC18F-Q_DFP/1.15.360
+DFP_DIR=C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC18F-Q_DFP/1.13.211
