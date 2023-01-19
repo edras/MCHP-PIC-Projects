@@ -1,78 +1,70 @@
-/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
- * and any derivatives exclusively with Microchip products. 
- * 
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
- * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
- * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
- * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
- * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
- *
- * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
- * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
- * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
- * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
- * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
- * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
- * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
- * TERMS. 
- */
-
-/* 
- * File:   
- * Author: 
- * Comments:
- * Revision history: 
- */
-
-// This is a guard condition so that contents of this file are not included
-// more than once.  
 #ifndef OLED_H
 #define	OLED_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+#include <xc.h>
 
-// TODO Insert appropriate #include <>
+#include "mcc_generated_files/system/system.h"
 
-// TODO Insert C++ class definitions if appropriate
+#define OLED_WIDTH             96
+#define OLED_HEIGHT            39
 
-// TODO Insert declarations
+#define SSD1306_DISPLAYOFF          0xAE
+#define SSD1306_SETDISPLAYCLOCKDIV  0xD5
+#define SSD1306_SETMULTIPLEX        0xA8
+#define SSD1306_SETDISPLAYOFFSET    0xD3
+#define SSD1306_SETSTARTLINE        0x40
+#define SSD1306_CHARGEPUMP          0x8D
 
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
+#define SSD1306_SETSEGMENTREMAP     0xA1  
+#define SSD1306_SEGREMAP            0xA0
 
-    <p><b>Description:</b></p>
+#define SSD1306_COMSCANDEC          0xC8
+#define SSD1306_SETCOMPINS          0xDA
+#define SSD1306_SETCONTRAST         0x81
+#define SSD1306_SETPRECHARGE        0xD9
+#define SSD1306_SETVCOMDETECT       0xDB
+#define SSD1306_DISPLAYALLON_RESUME 0xA4
+#define SSD1306_NORMALDISPLAY       0xA6
+#define SSD1306_DISPLAYON           0xAF
 
-    <p><b>Precondition:</b></p>
+#define SSD1306_DISPLAYALLON        0xA5
+#define SSD1306_INVERTDISPLAY       0xA7
+#define SSD1306_SETLOWCOLUMN        0x00
+#define SSD1306_SETHIGHCOLUMN       0x10
+#define SSD1306_MEMORYMODE          0x20
+#define SSD1306_COLUMNADDR          0x21
+#define SSD1306_PAGEADDR            0x22
+#define SSD1306_COMSCANINC          0xC0
+#define SSD1306_SEGREMAP            0xA0
+#define SSD1306_EXTERNALVCC         0x1
+#define SSD1306_SWITCHCAPVCC        0x2
 
-    <p><b>Parameters:</b></p>
-
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
- */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
+#define SSD1306_ACTIVATE_SCROLL                         0x2F
+#define SSD1306_DEACTIVATE_SCROLL                       0x2E
+#define SSD1306_SET_VERTICAL_SCROLL_AREA                0xA3
+#define SSD1306_RIGHT_HORIZONTAL_SCROLL                 0x26
+#define SSD1306_LEFT_HORIZONTAL_SCROLL                  0x27
+#define SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL    0x29
+#define SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL     0x2A
 
 #ifdef	__cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif /* __cplusplus */   
 
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
+void OLED_Command(uint8_t);
+void OLED_Data(uint8_t);
+void OLED_Initialize(void);
+void OLED_SetRow(uint8_t);
+void OLED_SetColumn(uint8_t);
+void OLED_PutPicture(const uint8_t *);
+void OLED_SetContrast(uint8_t);
+void OLED_Putchar(char ch);
+void OLED_Puts(uint8_t x, uint8_t y, char *s);
+void OLED_Clear(void);
+void OLED_PrintCuriosityLogo();
 
 #ifdef	__cplusplus
 }
 #endif /* __cplusplus */
 
 #endif	/* OLED_H */
-

@@ -64,7 +64,7 @@ typedef struct
 //con0 == SPIxCON0, con1 == SPIxCON1, con2 == SPIxCON2, baud == SPIxBAUD, operation == Host/Client
 static const spi1_configuration_t spi1_configuration[] = 
 {   
-    { 0x2, 0x40, 0x0, 0x0, 0 }
+    { 0x2, 0x40, 0x0, 0x13, 0 }
 };
 
 void SPI1_Initialize(void)
@@ -73,11 +73,11 @@ void SPI1_Initialize(void)
     SPI1CON1 = 0x40;
     //RXR data is not stored in the FIFO; TXR not required for a transfer; SSET disabled; 
     SPI1CON2 = 0x0;
-    //CLKSEL FOSC; 
-    SPI1CLK = 0x0;
-    //BAUD 0; 
-    SPI1BAUD = 0x0;
-    TRISCbits.TRISC3 = 0;
+    //CLKSEL HFINTOSC; 
+    SPI1CLK = 0x1;
+    //BAUD 19; 
+    SPI1BAUD = 0x13;
+    TRISCbits.TRISC6 = 0;
     //BMODE last byte; MST bus host; LSBF MSb first; EN disabled; 
     SPI1CON0 = 0x2;
 }
@@ -91,7 +91,7 @@ bool SPI1_Open(uint8_t spiConfigIndex)
         SPI1CON2 = spi1_configuration[spiConfigIndex].con2 | (_SPI1CON2_SPI1RXR_MASK | _SPI1CON2_SPI1TXR_MASK);
         SPI1CLK  = 0x00;
         SPI1BAUD = spi1_configuration[spiConfigIndex].baud;        
-        TRISCbits.TRISC3 = spi1_configuration[spiConfigIndex].operation;
+        TRISCbits.TRISC6 = spi1_configuration[spiConfigIndex].operation;
         SPI1CON0bits.EN = 1;
         return true;
     }

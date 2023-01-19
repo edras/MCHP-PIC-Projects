@@ -32,7 +32,6 @@
 #define	BME280_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
-#include <stdint.h>
 
 typedef enum {
     PA = 0,
@@ -49,8 +48,7 @@ typedef enum {
 
 #ifdef	__cplusplus
 extern "C" {
-#endif /* __cplusplus */
-    
+#endif /* __cplusplus */    
 
 uint8_t BME280_getID(void);
 void BME280_reset(void);
@@ -58,16 +56,16 @@ void BME280_sleep(void);
 void BME280_init(void);
 void BME280_startMeasurements(void);
 void BME280_readMeasurements(void);
+void BME280_setPressureUnity(BME280_P_UNIT);
+void BME280_setTempUnity(BME280_T_UNIT);
 float BME280_getTemperature(void);
 float BME280_getHumidity(void);
 float BME280_getPressure(void);
-void BME280_setPressureUnity(BME280_P_UNIT);
-void BME280_setTempUnity(BME280_T_UNIT);
 
 #ifdef	__cplusplus
 }
 #endif /* __cplusplus */
 
-#endif	/* XC_HEADER_TEMPLATE_H */
+#endif	/* BME280_H */
 
 

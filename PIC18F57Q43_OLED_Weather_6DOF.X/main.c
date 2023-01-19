@@ -33,6 +33,7 @@
 #include "mcc_generated_files/system/system.h"
 #include "bme280.h"
 #include "oled.h"
+#include "logo.h"
 
 /*
     Main application
@@ -47,6 +48,10 @@ int main(void)
     BME280_init();
     BME280_setPressureUnity(KPA);
     BME280_setTempUnity(C);
+    
+    OLED_Initialize();
+    OLED_PrintCuriosityLogo();
+    OLED_Clear();
 
     while(1)
     {
@@ -59,6 +64,6 @@ int main(void)
         float temperature = BME280_getTemperature();
         float pressure = BME280_getPressure();
         printf("Moisture: %.2f%%, Pressure: %.2f KPa, Temp: %.2f C\r\n", 
-                moisture, pressure, temperature);
+                moisture, pressure, temperature);           
     }    
 }
