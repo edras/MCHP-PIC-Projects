@@ -1,14 +1,14 @@
-/**
- * CLOCK Generated Driver Source File
- * 
- * @file clock.c
- * 
- * @ingroup clockdriver 
- * 
- * @brief This is the generated driver implementation file for the CLOCK.
+/** 
+ * TMR Generated Driver API Header File
  *
- * @version Driver Version 2.0.2
-*/
+ * @file timer_interface.h
+ *  
+ * @defgroup timer_interface Timer interface
+ *
+ * @brief This header file provides interfaces to Timer APIs.
+ *
+ * @version TMR_interface Version 1.0.1
+ */
 
 /*
 © [2023] Microchip Technology Inc. and its subsidiaries.
@@ -31,25 +31,32 @@
     THIS SOFTWARE.
 */
 
-#include <xc.h>
-#include "../clock.h"
+#ifndef TMR_INTERFACE_H
+#define TMR_INTERFACE_H
 
-void CLOCK_Initialize(void)
-{
-    // Set the CLOCK CONTROL module to the options selected in the user interface.
-    // NDIV 1; NOSC HFINTOSC; 
-    OSCCON1 = 0x60;
-    // SOSCPWR Low power; CSWHOLD may proceed; 
-    OSCCON3 = 0x0;
-    // EXTOEN disabled; HFOEN disabled; MFOEN disabled; LFOEN disabled; SOSCEN disabled; ADOEN disabled; 
-    OSCEN = 0x0;
-    // HFFRQ 48_MHz; 
-    OSCFRQ = 0x7;
-    // TUN undefined; 
-    OSCTUNE = 0x0;
-    // ACTEN disabled; ACTUD enabled; 
-    ACTCON = 0x0;
-}
 /**
- End of File
-*/
+ * @brief This file contains API prototypes and other data types for Timer interface.
+ * @{
+ */
+
+#include<stddef.h>
+        
+/**
+ @ingroup timer_interface
+ @struct TMR_INTERFACE
+ @brief This structure contains the interfaces to Timer module
+ */
+ 
+struct TMR_INTERFACE
+{
+    void (*Initialize)(void);
+    void (*Start)(void);
+    void (*Stop)(void);
+    void (*PeriodCountSet)(size_t count);
+    void (*TimeoutCallbackRegister)(void (* CallbackHandler)(void));
+    void (*Tasks)(void);
+};
+/**
+ * @}
+ */
+#endif //TMR_INTERFACE_H

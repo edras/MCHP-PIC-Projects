@@ -34,16 +34,99 @@
 #include "bme280.h"
 #include "oled.h"
 #include "logo.h"
+#include "timer.h"
 
 /*
     Main application
 */
+
+#define BME280_READING_TIME 1000
+#define LED_TOGGLE_TIME     200
+#define WEATHER_PRINT_TIME  3000
+
+unsigned long bme280Time = 0;
+unsigned long ledToggleTime = 0;
+unsigned long weatherPrintTime = 0;
+
+void readWeatherData(void)
+{
+    unsigned long currentMillis = TIMER_getCurrentMillis();
+    if(currentMillis > bme280Time)
+    {
+        bme280Time = currentMillis + BME280_READING_TIME;
+        BME280_readMeasurements();
+        BME280_startMeasurements();
+    }
+}
+
+void toggleLed(void)
+{
+    unsigned long currentMillis = TIMER_getCurrentMillis();
+    if(currentMillis > ledToggleTime)
+    {
+        ledToggleTime = currentMillis + LED_TOGGLE_TIME;
+        LED_Toggle();
+    }    
+}
+
+void printWeatherData(void)
+{
+    unsigned long currentMillis = TIMER_getCurrentMillis();
+    char buffer[20];
+    
+    if(currentMillis > weatherPrintTime)
+    {
+        weatherPrintTime = currentMillis + WEATHER_PRINT_TIME;
+        float moisture = BME280_getHumidity();
+        float temperature = BME280_getTemperature();
+        float pressure = BME280_getPressure();
+        printf("T:%.2fC H:%.1f%% P:%.2fKPa\r\n", 
+                temperature, moisture, pressure);
+        sprintf(buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
+        OLED_Puts(0, 0, buffer);
+        sprintf(buffer, "P:%.2fKPa", pressure);
+        OLED_Puts(0, 1, buffer);
+    }       
+}
+
+void printUart2Oled()
+{
+    char buffer[16];
+    if(UART1_IsRxReady())
+    {   
+        uint8_t ptr = 0;
+        uint8_t rx_char = 0;
+        uint16_t timeout = 0;
+        OLED_Puts(0, 4, "                ");
+        while(rx_char != '\n')
+        {
+            if(UART1_IsRxReady())
+            {
+                rx_char = UART1_Read();
+                if(rx_char == '\r' || rx_char == '\n') continue;
+                buffer[ptr++] = rx_char;                
+                ptr &= 0x0F;                
+            }
+            else
+            {
+                timeout++;
+                if(timeout == 0) return;
+            }
+        }
+        buffer[ptr] = 0x00;
+        OLED_Puts(0, 4, buffer);
+        while(UART1_IsRxReady()) UART1_Read();
+    }    
+}
+
 
 int main(void)
 {
     SYSTEM_Initialize();
 
     INTERRUPT_GlobalInterruptEnable(); 
+    
+    Timer0_OverflowCallbackRegister(TIMER_Callback);
 
     BME280_init();
     BME280_setPressureUnity(KPA);
@@ -52,18 +135,12 @@ int main(void)
     OLED_Initialize();
     OLED_PrintCuriosityLogo();
     OLED_Clear();
-
+    
     while(1)
     {
-        BME280_startMeasurements();
-        __delay_ms(1000);
-        LED_Toggle();
-        BME280_readMeasurements();
-        
-        float moisture = BME280_getHumidity();
-        float temperature = BME280_getTemperature();
-        float pressure = BME280_getPressure();
-        printf("Moisture: %.2f%%, Pressure: %.2f KPa, Temp: %.2f C\r\n", 
-                moisture, pressure, temperature);           
+        readWeatherData();
+        printWeatherData();
+        printUart2Oled();
+        toggleLed();
     }    
 }

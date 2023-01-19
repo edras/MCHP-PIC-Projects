@@ -301,6 +301,7 @@ void BME280_init(void)
     I2C_WriteRegister(BME280_CTRL_MEAS_REG, bme280_ctrl_meas.ctrlMeasReg);   
 }
 
+/* After calling this function, wait for conversion to be read before read */
 void BME280_startMeasurements(void) {
     bme280_ctrl_meas.mode = BME280_FORCED_MODE;
     I2C_WriteRegister(BME280_CTRL_MEAS_REG, bme280_ctrl_meas.ctrlMeasReg);

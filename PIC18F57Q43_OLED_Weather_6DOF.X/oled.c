@@ -5,8 +5,6 @@
 #include "oled.h"
 #include "logo.h"
 
-#define SPI_Write(x)        SPI1_ByteWrite(x)
-
 void OLED_Command(uint8_t temp){
     SPI1_Open(SPI1_DEFAULT);
     CS2_SetLow();
@@ -55,13 +53,13 @@ void OLED_Initialize( void)
     OLED_Command(SSD1306_DISPLAYON);              //0xAF   Set OLED Display On
 } // OLED_Initialize
 
-void OLED_SetRow( uint8_t add)
+void OLED_SetRow(uint8_t add)
 {
     add = 0xB0 | add;
-    OLED_Command( add);
+    OLED_Command(add);
 }
 
-void OLED_SetColumn( uint8_t add)
+void OLED_SetColumn(uint8_t add)
 {
     add += 32;
     OLED_Command((SSD1306_SETHIGHCOLUMN | (add >> 4))); // SET_HIGH_COLUMN
@@ -82,7 +80,7 @@ void OLED_PutPicture(const uint8_t *pic)
     }
 }
 
-void OLED_Clear( void)
+void OLED_Clear(void)
 {
     unsigned char i,j;
     for(i=0; i<5; i++) // 5*8=40 pixel rows (actually 39)
@@ -93,10 +91,10 @@ void OLED_Clear( void)
     }
 }
 
-void OLED_SetContrast( uint8_t temp)
+void OLED_SetContrast(uint8_t temp)
 {
-    OLED_Command( SSD1306_SETCONTRAST);  
-    OLED_Command( temp);                  // contrast step 1 to 256
+    OLED_Command(SSD1306_SETCONTRAST);  
+    OLED_Command(temp);                  // contrast step 1 to 256
 }
 
 const uint8_t font[] = {
@@ -122,7 +120,8 @@ const uint8_t font[] = {
     0x03,0x01,0x7F,0x01,0x03,0x3F,0x40,0x40,0x40,0x3F,0x1F,0x20,0x40,0x20,0x1F, //	'T,U,V
     0x3F,0x40,0x38,0x40,0x3F,0x63,0x14,0x08,0x14,0x63,0x03,0x04,0x78,0x04,0x03, //	'W,X,Y
     0x61,0x59,0x49,0x4D,0x43,                                                   //  'Z
-    0x00,0x7F,0x41,0x41,0x41,0x02,0x04,0x08,0x10,0x20,                          //	'[,\ 
+    0x00,0x7F,0x41,0x41,0x41,0x02,0x04,0x08,0x10,0x20,                          //	'[,\\ 
+    0x00,0x41,0x41,0x41,0x7F,0x04,0x02,0x01,0x02,0x04,0x40,0x40,0x40,0x40,0x40, //	'],^,_
     0x00,0x41,0x41,0x41,0x7F,0x04,0x02,0x01,0x02,0x04,0x40,0x40,0x40,0x40,0x40, //	'],^,_
     0x00,0x03,0x07,0x08,0x00,0x20,0x54,0x54,0x38,0x40,0x7F,0x28,0x44,0x44,0x38, //	'`,a,b
     0x38,0x44,0x44,0x44,0x28,0x38,0x44,0x44,0x28,0x7F,0x38,0x54,0x54,0x54,0x18, //	'c,d,e
@@ -141,14 +140,16 @@ void OLED_Putchar(char ch)
 {
     uint8_t i;
     const uint8_t *f = &font[(ch-' ')*5];
-    for( i=0; i<5; i++)
+    if(ch == '\n' || ch == '\r') return;
+    for(i=0; i<5; i++)
         OLED_Data(*f++ << 1);
+    OLED_Data(0x00); // 1 px empty column after char
 }
 
 void OLED_Puts(uint8_t x, uint8_t y, char *s)
 {
     OLED_SetRow(y);
-    OLED_SetColumn(x *6);    
+    OLED_SetColumn(x*6);    
     while(*s) {
         OLED_Putchar(*s++);
         x++;
@@ -157,21 +158,25 @@ void OLED_Puts(uint8_t x, uint8_t y, char *s)
 
 void OLED_PrintCuriosityLogo(void)
 {
+    unsigned char i;
+    
     OLED_Clear();
     OLED_PutPicture(curiosity_logo);
-    __delay_ms(2000);
-    OLED_Command(SSD1306_INVERTDISPLAY);
-    __delay_ms(2000);
-    OLED_Command(SSD1306_NORMALDISPLAY);
     __delay_ms(500);
+    
+    for(i=0; i<2; i++)
+    {
+        OLED_Command(SSD1306_INVERTDISPLAY);
+        __delay_ms(500);
+        OLED_Command(SSD1306_NORMALDISPLAY);
+        __delay_ms(500);
+    }
 
-   for(uint8_t i=0xAF; i>0x00; i--)
+   for(i=0xAF; i>0x00; i--)
    {
-        OLED_SetContrast( i);
-        __delay_ms(20);
+        OLED_SetContrast(i);
+        __delay_ms(10);
    }
-   for(uint8_t i=0x00; i<0xAF; i++){
-        OLED_SetContrast( i);
-        __delay_ms(20);
-   }    
+   OLED_Clear();
+   OLED_SetContrast(0xAF);
 }

@@ -46,6 +46,7 @@
 #include "../system/pins.h"
 #include "../i2c_host/i2c1.h"
 #include "../spi/spi1.h"
+#include "../timer/tmr0.h"
 #include "../uart/uart1.h"
 #include "../system/interrupt.h"
 

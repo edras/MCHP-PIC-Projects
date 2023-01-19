@@ -46,6 +46,7 @@ void SYSTEM_Initialize(void)
     PIN_MANAGER_Initialize();
     I2C1_Host_Initialize();
     SPI1_Initialize();
+    Timer0_Initialize();
     UART1_Initialize();
     INTERRUPT_Initialize();
 }
