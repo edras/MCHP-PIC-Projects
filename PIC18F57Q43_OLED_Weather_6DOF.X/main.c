@@ -32,6 +32,7 @@
 */
 #include "mcc_generated_files/system/system.h"
 #include "bme280.h"
+#include "bmi160.h"
 #include "oled.h"
 #include "logo.h"
 #include "timer.h"
@@ -41,12 +42,14 @@
 */
 
 #define BME280_READING_TIME 1000
-#define LED_TOGGLE_TIME     200
+#define LED_TOGGLE_TIME     500
 #define WEATHER_PRINT_TIME  3000
+#define IMU_6DOF_TIME       1000
 
 unsigned long bme280Time = 0;
 unsigned long ledToggleTime = 0;
 unsigned long weatherPrintTime = 0;
+unsigned long imu6DofTime = 0;
 
 void readWeatherData(void)
 {
@@ -89,6 +92,24 @@ void printWeatherData(void)
     }       
 }
 
+void print6DOFData(void)
+{
+    unsigned long currentMillis = TIMER_getCurrentMillis();
+    
+    if(currentMillis > imu6DofTime)
+    {
+        imu6DofTime = currentMillis + IMU_6DOF_TIME;
+        int16_t xAcc = IMU_6DOF_ReadXAcc();
+        int16_t yAcc = IMU_6DOF_ReadYAcc();
+        int16_t zAcc = IMU_6DOF_ReadZAcc();
+        printf("Accel x:%d y:%d z:%d\r\n",  xAcc, yAcc, zAcc);
+        //sprintf(buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
+        //OLED_Puts(0, 0, buffer);
+        //sprintf(buffer, "P:%.2fKPa", pressure);
+        //OLED_Puts(0, 1, buffer);
+    }       
+}
+
 void printUart2Oled()
 {
     char buffer[16];
@@ -119,7 +140,6 @@ void printUart2Oled()
     }    
 }
 
-
 int main(void)
 {
     SYSTEM_Initialize();
@@ -132,6 +152,8 @@ int main(void)
     BME280_setPressureUnity(KPA);
     BME280_setTempUnity(C);
     
+    IMU_6_DOF_Init();
+    
     OLED_Initialize();
     OLED_PrintCuriosityLogo();
     OLED_Clear();
@@ -140,6 +162,7 @@ int main(void)
     {
         readWeatherData();
         printWeatherData();
+        print6DOFData();
         printUart2Oled();
         toggleLed();
     }    
