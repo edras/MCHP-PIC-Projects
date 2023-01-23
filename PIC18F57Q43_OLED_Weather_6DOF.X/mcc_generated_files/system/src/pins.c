@@ -61,10 +61,10 @@ void PIN_MANAGER_Initialize(void)
     ANSELx registers
     */
     ANSELA = 0xFF;
-    ANSELB = 0xF1;
+    ANSELB = 0xD1;
     ANSELC = 0x2F;
     ANSELD = 0xBF;
-    ANSELE = 0x7;
+    ANSELE = 0x3;
     ANSELF = 0xF4;
 
     /**
@@ -118,6 +118,7 @@ void PIN_MANAGER_Initialize(void)
     PPS registers
     */
     U1RXPPS = 0x29; //RF1->UART1:RX1;
+    INT2PPS = 0xD; //RB5->INTERRUPT MANAGER:INT2;
     RF0PPS = 0x20;  //RF0->UART1:TX1;
     RC4PPS = 0x32;  //RC4->SPI1:SDO1;
     SPI1SCKPPS = 0x16;  //RC6->SPI1:SCK1;

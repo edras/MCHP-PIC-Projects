@@ -9,20 +9,34 @@
 #define	IMU_6DOF_H
 #include <stdint.h>
 
-void IMU_6_DOF_Init(void);
+#define IMU_6DOF_TABLE_SIZE 0x7E
 
-int16_t IMU_6DOF_ReadPitchRate(void);
-int16_t IMU_6DOF_ReadYawAcc(void);
-int16_t IMU_6DOF_ReadRollAcc(void);
+typedef struct {
+    unsigned int sign       : 1;
+    unsigned int single_tap : 1;
+    unsigned int double_tap : 1;
+    unsigned int x          : 1;
+    unsigned int y          : 1;
+    unsigned int z          : 1;    
+} IMU_6DOF_Click;
 
-int16_t IMU_6DOF_ReadXRate(void);
-int16_t IMU_6DOF_ReadYRate(void);
-int16_t IMU_6DOF_ReadZRate(void);
+void IMU_6DOF_Init(void);
+
+int16_t IMU_6DOF_ReadXGyr(void);
+int16_t IMU_6DOF_ReadYGyr(void);
+int16_t IMU_6DOF_ReadZGyr(void);
 
 int16_t IMU_6DOF_ReadXAcc(void);
 int16_t IMU_6DOF_ReadYAcc(void);
 int16_t IMU_6DOF_ReadZAcc(void);
 
+uint8_t IMU_6DOF_ReadRegister(uint8_t reg);
+void IMU_6DOF_WriteRegister(uint8_t reg, uint8_t data);
+void IMU_6DOF_ReadDataBlock(uint8_t regi, uint8_t *data, size_t length);
+
+void IMU_6DOF_SetInterruptEnable(bool enable);
+void IMU_6DOF_InterruptHandler(void);
+bool IMU_6DOF_checkInterrupt(IMU_6DOF_Click *click);
 
 
 #endif	/* IMU_6DOF_H */

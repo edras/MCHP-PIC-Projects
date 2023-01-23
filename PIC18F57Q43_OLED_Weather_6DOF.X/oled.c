@@ -5,6 +5,8 @@
 #include "oled.h"
 #include "logo.h"
 
+unsigned char oled_contrast;
+
 void OLED_Command(uint8_t temp){
     SPI1_Open(SPI1_DEFAULT);
     CS2_SetLow();
@@ -17,6 +19,11 @@ void OLED_Data(uint8_t temp){
     OLED_DATA_SetHigh();
     OLED_Command(temp);
     OLED_DATA_SetLow();
+}
+
+uint8_t OLED_GetContrast(void)
+{
+    return oled_contrast;
 }
 
 void OLED_Initialize( void)
@@ -43,7 +50,8 @@ void OLED_Initialize( void)
     OLED_Command(SSD1306_SETCOMPINS);             //0xDA  Set COM Pins Hardware Configuration
     OLED_Command(0x12);
     OLED_Command(SSD1306_SETCONTRAST);            //0x81   Set Contrast Control
-    OLED_Command(0xAF);
+    oled_contrast = 0xAF;
+    OLED_Command(oled_contrast);
     OLED_Command(SSD1306_SETPRECHARGE);           //0xD9   Set Pre-Charge Period
     OLED_Command(0x25);
     OLED_Command(SSD1306_SETVCOMDETECT);          //0xDB   Set VCOMH Deselect Level
@@ -93,6 +101,7 @@ void OLED_Clear(void)
 
 void OLED_SetContrast(uint8_t temp)
 {
+    oled_contrast = temp;
     OLED_Command(SSD1306_SETCONTRAST);  
     OLED_Command(temp);                  // contrast step 1 to 256
 }

@@ -62,6 +62,7 @@ void OLED_Putchar(char ch);
 void OLED_Puts(uint8_t x, uint8_t y, char *s);
 void OLED_Clear(void);
 void OLED_PrintCuriosityLogo();
+uint8_t OLED_GetContrast(void);
 
 #ifdef	__cplusplus
 }

@@ -66,7 +66,7 @@ void  INTERRUPT_Initialize (void)
     EXT_INT2_risingEdgeSet();    
     // Set Default Interrupt Handler
     INT2_SetInterruptHandler(INT2_DefaultInterruptHandler);
-    // EXT_INT2_InterruptEnable();
+    EXT_INT2_InterruptEnable();
 
 }
 
@@ -85,7 +85,11 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         PIN_MANAGER_IOC();
     }
     // interrupt handler
-    if(PIE7bits.I2C1EIE == 1 && PIR7bits.I2C1EIF == 1)
+    if(PIE10bits.INT2IE == 1 && PIR10bits.INT2IF == 1)
+    {
+        INT2_ISR();
+    }
+    else if(PIE7bits.I2C1EIE == 1 && PIR7bits.I2C1EIF == 1)
     {
         I2C1_ERROR_ISR();
     }
