@@ -34,7 +34,7 @@
 #include "bme280.h"
 #include "bmi160.h"
 #include "oled.h"
-#include "timer.h"
+#include "tasks.h"
 #include "app.h"
 
 /*
@@ -47,7 +47,7 @@ int main(void)
 
     INTERRUPT_GlobalInterruptEnable(); 
     
-    Timer0_OverflowCallbackRegister(TIMER_Callback);
+    Timer0_OverflowCallbackRegister(Task_synch);
 
     BME280_init();
     BME280_setPressureUnity(KPA);
@@ -63,14 +63,16 @@ int main(void)
     
     printHeader();
     
+    Task_register(0, BME280_READING_TIME, readWeatherData);
+    Task_register(0, LED_TOGGLE_TIME, toggleLed);
+    Task_register(0, BUBBLE_TIME, scrollBubble);
+    Task_register(100, IMU_6DOF_TIME, print6DOFData);
+    Task_register(1000, WEATHER_PRINT_TIME, printWeatherData);
+    
     while(1)
     {
-        readWeatherData();
-        printWeatherData();
-        print6DOFData();
-        toggleLed();
+        Task_execute();
         readUartCommand();
         handleClick();
-        scrollBubble();
     }    
 }

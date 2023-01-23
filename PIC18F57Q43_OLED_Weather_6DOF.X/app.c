@@ -10,24 +10,10 @@
 #include "bme280.h"
 #include "bmi160.h"
 #include "oled.h"
-#include "timer.h"
+#include "tasks.h"
 #include <string.h>
 
-#define BME280_READING_TIME 1000
-#define LED_TOGGLE_TIME     500
-#define WEATHER_PRINT_TIME  3000
-#define IMU_6DOF_TIME       1000
-#define IMU_6DOF_CLICK_TIME 500
-#define BALL_TIME           100
-
 /* private variable */
-unsigned long bme280Time = 0;
-unsigned long ledToggleTime = 0;
-unsigned long weatherPrintTime = 0;
-unsigned long imu6DofTime = 0;
-unsigned long imu6DofClickTime = 0;
-unsigned long ballTime = 0;
-
 int16_t xAccBall = 0;
 
 /* private function prototypes */
@@ -41,25 +27,16 @@ void changeOLEDContrast(IMU_6DOF_Click *click);
 void printClickResult(IMU_6DOF_Click *click);
 void clearClick(void);
 
+/* function implementations */
 void readWeatherData(void)
 {
-    unsigned long currentMillis = TIMER_getCurrentMillis();
-    if(currentMillis > bme280Time)
-    {
-        bme280Time = currentMillis + BME280_READING_TIME;
-        BME280_readMeasurements();
-        BME280_startMeasurements();
-    }
+    BME280_readMeasurements();
+    BME280_startMeasurements();
 }
 
 void toggleLed(void)
 {
-    unsigned long currentMillis = TIMER_getCurrentMillis();
-    if(currentMillis > ledToggleTime)
-    {
-        ledToggleTime = currentMillis + LED_TOGGLE_TIME;
-        LED_Toggle();
-    }    
+    LED_Toggle();
 }
 
 void printHeader(void)
@@ -84,42 +61,30 @@ void printHeader(void)
 
 void printWeatherData(void)
 {
-    unsigned long currentMillis = TIMER_getCurrentMillis();
-    char buffer[20];
-    
-    if(currentMillis > weatherPrintTime)
-    {
-        weatherPrintTime = currentMillis + WEATHER_PRINT_TIME;
-        float moisture = BME280_getHumidity();
-        float temperature = BME280_getTemperature();
-        float pressure = BME280_getPressure();
-        printf("\033[12;0f\n");  //cursor to row 11, column 0 (after header)
-        printf("Weather\t\tT: %.2fC \tH: %.1f%% \tP: %.2fKPa      \r\n", 
-                temperature, moisture, pressure);
-        sprintf(buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
-        OLED_Puts(0, 0, buffer);
-        sprintf(buffer, "P:%.2fKPa", pressure);
-        OLED_Puts(0, 1, buffer);
-    }       
+    unsigned buffer[20];
+    float moisture = BME280_getHumidity();
+    float temperature = BME280_getTemperature();
+    float pressure = BME280_getPressure();
+    printf("\033[12;0f\n");  //cursor to row 11, column 0 (after header)
+    printf("Weather\t\tT: %.2fC \tH: %.1f%% \tP: %.2fKPa      \r\n", 
+            temperature, moisture, pressure);
+    sprintf(buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
+    OLED_Puts(0, 0, buffer);
+    sprintf(buffer, "P:%.2fKPa", pressure);
+    OLED_Puts(0, 1, buffer);
 }
 
 void print6DOFData(void)
 {
-    unsigned long currentMillis = TIMER_getCurrentMillis();
-    
-    if(currentMillis > imu6DofTime)
-    {
-        imu6DofTime = currentMillis + IMU_6DOF_TIME;
-        int16_t xAcc = IMU_6DOF_ReadXAcc();
-        int16_t yAcc = IMU_6DOF_ReadYAcc();
-        int16_t zAcc = IMU_6DOF_ReadZAcc();
-        int16_t xGyr = IMU_6DOF_ReadXGyr();
-        int16_t yGyr = IMU_6DOF_ReadYGyr();
-        int16_t zGyr = IMU_6DOF_ReadZGyr();
-        printf("\033[13;0f\n");  //cursor to row 11, column 0 (after weather data)
-        printf("Accelerometer \tx:%+6d \ty:%+6d \tz:%+6d   \r\n",  xAcc, yAcc, zAcc);
-        printf("Gyroscope \tx:%+6d \ty:%+6d \tz:%+6d       \r\n",  xGyr, yGyr, zGyr);
-    }       
+    int16_t xAcc = IMU_6DOF_ReadXAcc();
+    int16_t yAcc = IMU_6DOF_ReadYAcc();
+    int16_t zAcc = IMU_6DOF_ReadZAcc();
+    int16_t xGyr = IMU_6DOF_ReadXGyr();
+    int16_t yGyr = IMU_6DOF_ReadYGyr();
+    int16_t zGyr = IMU_6DOF_ReadZGyr();
+    printf("\033[13;0f\n");  //cursor to row 11, column 0 (after weather data)
+    printf("Accelerometer \tx:%+6d \ty:%+6d \tz:%+6d   \r\n",  xAcc, yAcc, zAcc);
+    printf("Gyroscope \tx:%+6d \ty:%+6d \tz:%+6d       \r\n",  xGyr, yGyr, zGyr);
 }
 
 void print2Oled(char * buffer)
@@ -270,7 +235,7 @@ void printClickResult(IMU_6DOF_Click *click)
         else
         {
             if      (click->x) strcpy(result, "  > ");
-            else if (click->y) strcpy(result, " /\\");
+            else if (click->y) strcpy(result, "  /\\");
             else if (click->z) strcpy(result, " (-)");
         }
     }
@@ -304,38 +269,25 @@ void clearClick(void)
 void handleClick(void)
 {
     IMU_6DOF_Click click;
-    unsigned long currentMillis = TIMER_getCurrentMillis();
-    
     if(IMU_6DOF_checkInterrupt(&click))
     {
         printClickResult(&click);
         changeOLEDContrast(&click);
-        imu6DofClickTime = currentMillis + IMU_6DOF_CLICK_TIME;
+        Task_register(IMU_6DOF_CLICK_TIME, 0, clearClick);
     }    
-    
-    if(currentMillis > imu6DofClickTime)
-    {
-        clearClick();
-        imu6DofClickTime = 0xFFFFFFFF;
-    }
 }
 
 void scrollBubble(void)
 {
-    unsigned long currentMillis = TIMER_getCurrentMillis();    
-    if(currentMillis > ballTime)
+    int16_t temp = IMU_6DOF_ReadXAcc();
+    temp /= 341;
+    temp += 48;
+    if(temp < 0) temp = 0;
+    if(temp > 91) temp = 91;
+    if(temp != xAccBall)
     {
-        ballTime = currentMillis + BALL_TIME;
-        int16_t temp = IMU_6DOF_ReadXAcc();
-        temp /= 341;
-        temp += 48;
-        if(temp < 0) temp = 0;
-        if(temp > 91) temp = 91;
-        if(temp != xAccBall)
-        {
-            OLED_DrawChar(xAccBall, 3, ' ');
-            xAccBall = temp;
-            OLED_DrawChar(xAccBall, 3, 'o');
-        }        
-    }
+        OLED_DrawChar((uint8_t)xAccBall, 3, ' ');
+        xAccBall = temp;
+        OLED_DrawChar((uint8_t)xAccBall, 3, 'o');
+    }        
 }

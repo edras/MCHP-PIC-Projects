@@ -64,6 +64,13 @@
 // TODO Insert declarations or function prototypes (right here) to leverage 
 // live documentation
 
+#define BME280_READING_TIME 1000
+#define LED_TOGGLE_TIME     500
+#define WEATHER_PRINT_TIME  3000
+#define IMU_6DOF_TIME       1000
+#define IMU_6DOF_CLICK_TIME 500
+#define BUBBLE_TIME         100
+
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */

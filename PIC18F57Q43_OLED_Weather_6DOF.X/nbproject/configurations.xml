@@ -37,9 +37,9 @@
       <itemPath>bme280.h</itemPath>
       <itemPath>oled.h</itemPath>
       <itemPath>logo.h</itemPath>
-      <itemPath>timer.h</itemPath>
       <itemPath>bmi160.h</itemPath>
       <itemPath>app.h</itemPath>
+      <itemPath>tasks.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -84,9 +84,9 @@
       <itemPath>main.c</itemPath>
       <itemPath>bme280.c</itemPath>
       <itemPath>oled.c</itemPath>
-      <itemPath>timer.c</itemPath>
       <itemPath>bmi160.c</itemPath>
       <itemPath>app.c</itemPath>
+      <itemPath>tasks.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -67,8 +67,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
-    void TIMER_Callback(void);
-    unsigned long TIMER_getCurrentMillis();
+void Task_execute(void);
+void Task_register(uint16_t delay, uint16_t reload, void (* taskHandler)(void));
+void Task_synch(void);
 
 #ifdef	__cplusplus
 }
