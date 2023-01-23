@@ -199,7 +199,7 @@ void readUartCommand()
         getStringBuffer(buffer);
         switch(buffer[0])
         {
-            case 0: return;
+            case 0: return; // end-of-string
             case 'c': printHeader();      break;
             case '>': print2Oled(buffer); break;
             case '6': cmd6DOF(buffer);    break;

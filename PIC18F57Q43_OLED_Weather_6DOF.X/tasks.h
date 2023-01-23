@@ -28,8 +28,8 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef TIMER_H
-#define	TIMER_H
+#ifndef TASKS_H
+#define	TASKS_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
@@ -75,5 +75,5 @@ void Task_synch(void);
 }
 #endif /* __cplusplus */
 
-#endif	/* TIMER_H */
+#endif	/* TASKS_H */
 
