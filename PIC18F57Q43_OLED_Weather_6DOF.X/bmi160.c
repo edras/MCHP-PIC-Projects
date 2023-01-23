@@ -173,8 +173,11 @@ void IMU_6DOF_Init(void)
     IMU_6DOF_WriteRegister(0x54, 0x0F);  
     //enable output INT1, active HIGH, push-pull
     IMU_6DOF_WriteRegister(0x53, 0x0A);  
+    
+    //to enable interrupts, call module function IMU_6DOF_SetInterruptEnable
+    
     //interrupt enable for tap and double tap
-    IMU_6DOF_WriteRegister(REG_INT_EN, BIT_INT_EN_S_TAP | BIT_INT_EN_D_TAP);  
+    //IMU_6DOF_WriteRegister(REG_INT_EN, BIT_INT_EN_S_TAP | BIT_INT_EN_D_TAP);  
 }
 
 // Read the Y axis value from the accelerometer.

@@ -60,6 +60,7 @@ void OLED_PutPicture(const uint8_t *);
 void OLED_SetContrast(uint8_t);
 void OLED_Putchar(char ch);
 void OLED_Puts(uint8_t x, uint8_t y, char *s);
+void OLED_DrawChar(uint8_t x, uint8_t y, char ch);
 void OLED_Clear(void);
 void OLED_PrintCuriosityLogo();
 uint8_t OLED_GetContrast(void);
