@@ -68,10 +68,10 @@ void printWeatherData(void)
     printf("\033[12;0f\n");  //cursor to row 11, column 0 (after header)
     printf("Weather\t\tT: %.2fC \tH: %.1f%% \tP: %.2fKPa      \r\n", 
             temperature, moisture, pressure);
-    sprintf(buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
-    OLED_Puts(0, 0, buffer);
-    sprintf(buffer, "P:%.2fKPa", pressure);
-    OLED_Puts(0, 1, buffer);
+    sprintf((char*)buffer, "T:%.1fC H:%.1f%%", temperature, moisture);
+    OLED_Puts(0, 0, (char*)buffer);
+    sprintf((char*)buffer, "P:%.2fKPa", pressure);
+    OLED_Puts(0, 1, (char*)buffer);
 }
 
 void print6DOFData(void)

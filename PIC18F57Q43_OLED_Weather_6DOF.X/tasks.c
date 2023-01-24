@@ -7,12 +7,12 @@
 
 
 #include <xc.h>
+#include <stddef.h>
 #include "tasks.h"
 
 #define MAX_TASKS 10
 
-typedef struct 
-{
+typedef struct {
     uint16_t delay;
     uint16_t reload;
     uint8_t trigger;
@@ -28,7 +28,7 @@ void Task_synch(void)
         if(tasks[i].taskHandler)
         {
             if(tasks[i].delay > 0) tasks[i].delay--;
-            else
+            if(tasks[i].delay == 0)
             {
                 tasks[i].delay = tasks[i].reload;
                 tasks[i].trigger = 1;
@@ -37,7 +37,7 @@ void Task_synch(void)
     }
 }
 
-void Task_register(uint16_t delay, uint16_t reload, void (* taskHandler)(void))
+uint8_t Task_register(uint16_t delay, uint16_t reload, void (* task)(void))
 {
     for(uint8_t i = 0; i<MAX_TASKS; i++)
     {
@@ -46,17 +46,35 @@ void Task_register(uint16_t delay, uint16_t reload, void (* taskHandler)(void))
             tasks[i].delay = delay;
             tasks[i].reload = reload;
             tasks[i].trigger = 0;
-            tasks[i].taskHandler = taskHandler;
-            return;
+            tasks[i].taskHandler = task;
+            return i;
         }
     }
+    return TASK_FULL;
+}
+
+void Task_delete(uint8_t task_idx)
+{
+    if(task_idx < MAX_TASKS)
+    {
+        tasks[task_idx].taskHandler = NULL;
+        tasks[task_idx].trigger = 0;        
+    }        
+}
+
+void Task_modify(uint8_t task_idx, uint16_t reload)
+{
+    if(task_idx < MAX_TASKS)
+    {
+        tasks[task_idx].reload = reload;
+    }        
 }
 
 void Task_execute(void)
 {
     for(uint8_t i = 0; i<MAX_TASKS; i++)
     {
-        if(tasks[i].trigger)
+        if(tasks[i].taskHandler && tasks[i].trigger)
         {
             tasks[i].trigger = 0;
             // if we have a valid function pointer, call the function

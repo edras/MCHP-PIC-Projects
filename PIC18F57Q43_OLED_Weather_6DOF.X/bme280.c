@@ -269,7 +269,7 @@ void BME280_readFactoryCalibrationParams(void) {
     calibParam.dig_H3 = (uint8_t) paramBuff[2];
     calibParam.dig_H4 = (((int) paramBuff[3]) << 4) | (paramBuff[4] & 0xF);
     calibParam.dig_H5 = (((int) paramBuff[5]) << 4) | (paramBuff[4] >> 4);
-    calibParam.dig_H6 = (short) paramBuff[6];
+    calibParam.dig_H6 = (signed char) paramBuff[6];
 }
 
 void BME280_config(uint8_t sbtime, uint8_t coeff) {
@@ -313,16 +313,19 @@ void BME280_readMeasurements(void) {
 
     I2C_ReadDataBlock(BME280_PRESS_MSB_REG, sensorData, BME280_DATA_FRAME_SIZE);
     
-    sensor_H = ((uint32_t) sensorData[BME280_HUM_MSB] << 8) |
-            sensorData[BME280_HUM_LSB];
+    sensor_H = (long)(
+            ((uint32_t) sensorData[BME280_HUM_MSB] << 8) |
+            sensorData[BME280_HUM_LSB]);
 
-    sensor_T = ((uint32_t) sensorData[BME280_TEMP_MSB] << 12) |
+    sensor_T = (long)(
+            ((uint32_t) sensorData[BME280_TEMP_MSB] << 12) |
             (((uint32_t) sensorData[BME280_TEMP_LSB] << 4) |
-            ((uint32_t) sensorData[BME280_TEMP_XLSB] >> 4));
+            ((uint32_t) sensorData[BME280_TEMP_XLSB] >> 4)));
 
-    sensor_P = ((uint32_t) sensorData[BME280_PRESS_MSB] << 12) |
+    sensor_P = (long)(
+            ((uint32_t) sensorData[BME280_PRESS_MSB] << 12) |
             (((uint32_t) sensorData[BME280_PRESS_LSB] << 4) |
-            ((uint32_t) sensorData[BME280_PRESS_XLSB] >> 4));
+            ((uint32_t) sensorData[BME280_PRESS_XLSB] >> 4)));
 }
 
 void BME280_setPressureUnity(BME280_P_UNIT unity)
@@ -410,7 +413,7 @@ uint32_t BME280_compensatePressure(void) {
         return 0;
     }
 
-    p = (((uint32_t) (((long) 1048576) - sensor_P)-(pressV2 >> 12))) * 3125;
+    p = (uint32_t)((((long)1048576 - sensor_P)-(pressV2 >> 12)) * 3125);
     if (p < 0x80000000) 
     {
         p = (p << 1) / ((uint32_t) pressV1);
