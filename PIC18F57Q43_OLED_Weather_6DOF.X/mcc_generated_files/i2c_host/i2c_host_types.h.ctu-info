@@ -1,0 +1,5 @@
+{"summary": "MisraTypedefInfo", "data": [{"name": "i2c_host_transfer_setup_t", "file": "mcc_generated_files/i2c_host/i2c_host_types.h", "line": 58, "column": 3, "used": false}]}
+{"summary": "MisraMacro", "data": [{"name": "I2C_HOST_TYPES_H", "used": false, "file": "mcc_generated_files/i2c_host/i2c_host_types.h", "line": 35, "column": 0}]}
+{"summary": "MisraExternalIdentifiers", "data": []}
+{"summary": "MisraInternalIdentifiers", "data": []}
+{"summary": "MisraLocalIdentifiers", "data": []}

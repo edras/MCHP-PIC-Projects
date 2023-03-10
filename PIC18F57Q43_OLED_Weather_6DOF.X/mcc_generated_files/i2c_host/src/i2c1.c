@@ -239,14 +239,13 @@ void I2C1_ISR()
         }
         else 
         {
-            I2C1_RestartDisable();
             I2C1_StopSend();
             I2C1_Close();
         }
     }
     else if (I2C1PIEbits.RSCIE && I2C1PIRbits.RSCIF)
     {
-//        I2C1_RestartDisable();
+        I2C1_RestartDisable();
         I2C1PIRbits.RSCIF = 0;
     }
 }

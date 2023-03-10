@@ -1,0 +1,4 @@
+{"summary": "MisraMacro", "data": [{"name": "UART_TYPES_H", "used": false, "file": "mcc_generated_files/uart/uart_types.h", "line": 34, "column": 0}]}
+{"summary": "MisraExternalIdentifiers", "data": []}
+{"summary": "MisraInternalIdentifiers", "data": []}
+{"summary": "MisraLocalIdentifiers", "data": []}

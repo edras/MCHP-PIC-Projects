@@ -1,0 +1,4 @@
+{"summary": "MisraMacro", "data": [{"name": "TMR_INTERFACE_H", "used": false, "file": "mcc_generated_files/timer/timer_interface.h", "line": 35, "column": 0}]}
+{"summary": "MisraExternalIdentifiers", "data": []}
+{"summary": "MisraInternalIdentifiers", "data": []}
+{"summary": "MisraLocalIdentifiers", "data": []}

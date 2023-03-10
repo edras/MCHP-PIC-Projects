@@ -7,39 +7,34 @@
       <logicalFolder name="MCC Generated Files"
                      displayName="MCC Generated Files"
                      projectFiles="true">
-        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_event_types.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_types.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/i2c1.h</itemPath>
-          <itemPath>mcc_generated_files/i2c_host/i2c_host_interface.h</itemPath>
+        <logicalFolder name="config" displayName="config" projectFiles="true">
+          <itemPath>mcc_generated_files/config/clock_config.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="spi" displayName="spi" projectFiles="true">
-          <itemPath>mcc_generated_files/spi/spi_interface.h</itemPath>
-          <itemPath>mcc_generated_files/spi/spi1.h</itemPath>
+        <logicalFolder name="include" displayName="include" projectFiles="true">
+          <itemPath>mcc_generated_files/include/pin_manager.h</itemPath>
+          <itemPath>mcc_generated_files/include/port.h</itemPath>
+          <itemPath>mcc_generated_files/include/ccp.h</itemPath>
+          <itemPath>mcc_generated_files/include/protected_io.h</itemPath>
+          <itemPath>mcc_generated_files/include/cpuint.h</itemPath>
+          <itemPath>mcc_generated_files/include/rstctrl.h</itemPath>
+          <itemPath>mcc_generated_files/include/BL_AVR.h</itemPath>
+          <itemPath>mcc_generated_files/include/nvmctrl.h</itemPath>
+          <itemPath>mcc_generated_files/include/usart0.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="system" displayName="system" projectFiles="true">
-          <itemPath>mcc_generated_files/system/pins.h</itemPath>
-          <itemPath>mcc_generated_files/system/interrupt.h</itemPath>
-          <itemPath>mcc_generated_files/system/clock.h</itemPath>
-          <itemPath>mcc_generated_files/system/config_bits.h</itemPath>
-          <itemPath>mcc_generated_files/system/system.h</itemPath>
+        <logicalFolder name="utils" displayName="utils" projectFiles="true">
+          <logicalFolder name="assembler" displayName="assembler" projectFiles="true">
+            <itemPath>mcc_generated_files/utils/assembler/gas.h</itemPath>
+            <itemPath>mcc_generated_files/utils/assembler/iar.h</itemPath>
+          </logicalFolder>
+          <itemPath>mcc_generated_files/utils/utils_assert.h</itemPath>
+          <itemPath>mcc_generated_files/utils/compiler.h</itemPath>
+          <itemPath>mcc_generated_files/utils/atomic.h</itemPath>
+          <itemPath>mcc_generated_files/utils/interrupt_avr8.h</itemPath>
+          <itemPath>mcc_generated_files/utils/assembler.h</itemPath>
+          <itemPath>mcc_generated_files/utils/utils.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="timer" displayName="timer" projectFiles="true">
-          <itemPath>mcc_generated_files/timer/tmr0.h</itemPath>
-          <itemPath>mcc_generated_files/timer/timer_interface.h</itemPath>
-        </logicalFolder>
-        <logicalFolder name="uart" displayName="uart" projectFiles="true">
-          <itemPath>mcc_generated_files/uart/uart_drv_interface.h</itemPath>
-          <itemPath>mcc_generated_files/uart/uart_types.h</itemPath>
-          <itemPath>mcc_generated_files/uart/uart1.h</itemPath>
-        </logicalFolder>
+        <itemPath>mcc_generated_files/mcc.h</itemPath>
       </logicalFolder>
-      <itemPath>bme280.h</itemPath>
-      <itemPath>oled.h</itemPath>
-      <itemPath>logo.h</itemPath>
-      <itemPath>bmi160.h</itemPath>
-      <itemPath>app.h</itemPath>
-      <itemPath>tasks.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -51,48 +46,24 @@
       <logicalFolder name="MCC Generated Files"
                      displayName="MCC Generated Files"
                      projectFiles="true">
-        <logicalFolder name="i2c_host" displayName="i2c_host" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/i2c_host/src/i2c1.c</itemPath>
-          </logicalFolder>
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>mcc_generated_files/src/pin_manager.c</itemPath>
+          <itemPath>mcc_generated_files/src/protected_io.S</itemPath>
+          <itemPath>mcc_generated_files/src/cpuint.c</itemPath>
+          <itemPath>mcc_generated_files/src/nvmctrl.c</itemPath>
+          <itemPath>mcc_generated_files/src/usart0.c</itemPath>
         </logicalFolder>
-        <logicalFolder name="spi" displayName="spi" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/spi/src/spi1.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="system" displayName="system" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/system/src/interrupt.c</itemPath>
-            <itemPath>mcc_generated_files/system/src/config_bits.c</itemPath>
-            <itemPath>mcc_generated_files/system/src/system.c</itemPath>
-            <itemPath>mcc_generated_files/system/src/clock.c</itemPath>
-            <itemPath>mcc_generated_files/system/src/pins.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="timer" displayName="timer" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/timer/src/tmr0.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="uart" displayName="uart" projectFiles="true">
-          <logicalFolder name="src" displayName="src" projectFiles="true">
-            <itemPath>mcc_generated_files/uart/src/uart1.c</itemPath>
-          </logicalFolder>
-        </logicalFolder>
+        <itemPath>mcc_generated_files/mcc.c</itemPath>
+        <itemPath>mcc_generated_files/device_config.c</itemPath>
+        <itemPath>mcc_generated_files/BL_AVR.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
-      <itemPath>bme280.c</itemPath>
-      <itemPath>oled.c</itemPath>
-      <itemPath>bmi160.c</itemPath>
-      <itemPath>app.c</itemPath>
-      <itemPath>tasks.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
-      <itemPath>PIC18F57Q43_OLED_Weather_6DOF.mc3</itemPath>
+      <itemPath>Attiny_bootloader_classic.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -100,7 +71,7 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC18F57Q43</targetDevice>
+        <targetDevice>ATtiny1607</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>nEdbgTool</platformTool>
@@ -109,7 +80,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC18F-Q_DFP" vendor="Microchip" version="1.13.211"/>
+        <pack name="ATtiny_DFP" vendor="Microchip" version="3.0.151"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -145,21 +116,21 @@
         <property key="default-bitfield-type" value="true"/>
         <property key="default-char-type" value="true"/>
         <property key="define-macros" value=""/>
-        <property key="disable-optimizations" value="true"/>
+        <property key="disable-optimizations" value="false"/>
         <property key="extra-include-directories" value=""/>
         <property key="favor-optimization-for" value="-speed,+space"/>
         <property key="garbage-collect-data" value="true"/>
         <property key="garbage-collect-functions" value="true"/>
         <property key="identifier-length" value="255"/>
         <property key="local-generation" value="false"/>
-        <property key="operation-mode" value="pro"/>
+        <property key="operation-mode" value="free"/>
         <property key="opt-xc8-compiler-strict_ansi" value="false"/>
         <property key="optimization-assembler" value="true"/>
         <property key="optimization-assembler-files" value="false"/>
         <property key="optimization-debug" value="false"/>
         <property key="optimization-invariant-enable" value="false"/>
         <property key="optimization-invariant-value" value="16"/>
-        <property key="optimization-level" value="-O0"/>
+        <property key="optimization-level" value="-O1"/>
         <property key="optimization-speed" value="false"/>
         <property key="optimization-stable-enable" value="false"/>
         <property key="preprocess-assembler" value="true"/>
@@ -188,9 +159,9 @@
         <property key="code-model-rom" value=""/>
         <property key="create-html-files" value="false"/>
         <property key="data-model-ram" value=""/>
-        <property key="data-model-size-of-double" value="32"/>
+        <property key="data-model-size-of-double" value="24"/>
         <property key="data-model-size-of-double-gcc" value="no-short-double"/>
-        <property key="data-model-size-of-float" value="32"/>
+        <property key="data-model-size-of-float" value="24"/>
         <property key="data-model-size-of-float-gcc" value="no-short-float"/>
         <property key="display-class-usage" value="false"/>
         <property key="display-hex-usage" value="false"/>
@@ -220,13 +191,10 @@
       </HI-TECH-LINK>
       <Tool>
         <property key="AutoSelectMemRanges" value="auto"/>
-        <property key="Freeze Peripherals" value="true"/>
         <property key="communication.activationmode" value="nohv"/>
         <property key="communication.interface"
                   value="${communication.interface.default}"/>
         <property key="communication.speed" value="${communication.speed.default}"/>
-        <property key="debugoptions.debug-startup" value="Use system settings"/>
-        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="firmware.path"
                   value="Press to browse for a specific firmware version"/>
@@ -246,16 +214,14 @@
         <property key="memories.instruction.ram.ranges"
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
-        <property key="memories.programmemory.ranges" value="0-1ffff"/>
+        <property key="memories.programmemory.ranges" value="0-1fff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/M71906/MPLABXProjects/MCHP-PIC-Projects/PIC18F57Q43_OLED_Weather_6DOF.X/debug/default/PIC18F57Q43_OLED_Weather_6DOF_ptg"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
                   value="${memories.dataflash.default}"/>
         <property key="programoptions.preserveeeprom" value="false"/>
-        <property key="programoptions.preserveeeprom.ranges" value="380000-3803ff"/>
+        <property key="programoptions.preserveeeprom.ranges" value="1400-14ff"/>
         <property key="programoptions.preserveprogram.ranges" value=""/>
         <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="programoptions.preserveuserid" value="false"/>
@@ -287,14 +253,11 @@
       </XC8-config-global>
       <nEdbgTool>
         <property key="AutoSelectMemRanges" value="auto"/>
-        <property key="Freeze Peripherals" value="true"/>
         <property key="communication.activationmode" value="nohv"/>
         <property key="communication.interface"
                   value="${communication.interface.default}"/>
         <property key="communication.speed" value="${communication.speed.default}"/>
-        <property key="debugoptions.debug-startup" value="Use system settings"/>
-        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
-        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
         <property key="firmware.path"
                   value="Press to browse for a specific firmware version"/>
         <property key="firmware.toolpack"
@@ -313,14 +276,14 @@
         <property key="memories.instruction.ram.ranges"
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
-        <property key="memories.programmemory.ranges" value="0-1ffff"/>
+        <property key="memories.programmemory.ranges" value="0-1fff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
                   value="${memories.dataflash.default}"/>
         <property key="programoptions.preserveeeprom" value="false"/>
-        <property key="programoptions.preserveeeprom.ranges" value="380000-3803ff"/>
+        <property key="programoptions.preserveeeprom.ranges" value="1400-14ff"/>
         <property key="programoptions.preserveprogram.ranges" value=""/>
         <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="programoptions.preserveuserid" value="false"/>

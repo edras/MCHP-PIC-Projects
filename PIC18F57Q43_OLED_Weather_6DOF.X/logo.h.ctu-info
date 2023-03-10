@@ -1,0 +1,4 @@
+{"summary": "MisraMacro", "data": [{"name": "LOGO_H", "used": false, "file": "logo.h", "line": 32, "column": 0}]}
+{"summary": "MisraExternalIdentifiers", "data": [{"name": "curiosity_logo", "file": "logo.h", "line": 46, "column": 15, "decl": false}]}
+{"summary": "MisraInternalIdentifiers", "data": []}
+{"summary": "MisraLocalIdentifiers", "data": []}

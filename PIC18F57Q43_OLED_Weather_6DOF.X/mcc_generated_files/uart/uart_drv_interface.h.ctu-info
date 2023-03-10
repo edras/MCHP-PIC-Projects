@@ -1,0 +1,5 @@
+{"summary": "MisraTypedefInfo", "data": [{"name": "uart_drv_interface_t", "file": "mcc_generated_files/uart/uart_drv_interface.h", "line": 82, "column": 2, "used": false}]}
+{"summary": "MisraMacro", "data": [{"name": "UART_DRV_INTERFACE_H", "used": false, "file": "mcc_generated_files/uart/uart_drv_interface.h", "line": 34, "column": 0}, {"name": "UART_TYPES_H", "used": false, "file": "mcc_generated_files/uart/uart_types.h", "line": 34, "column": 0}]}
+{"summary": "MisraExternalIdentifiers", "data": []}
+{"summary": "MisraInternalIdentifiers", "data": []}
+{"summary": "MisraLocalIdentifiers", "data": []}
